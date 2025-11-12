@@ -59,7 +59,7 @@ Key Features
 
 Secure authentication (Sign up / Log in / Log out) using Supabase Auth
 
-Persistent sessions — users remain logged in after app restart
+Persistent sessions - users remain logged in after app restart
 
 Create posts with text and an optional image (images stored via Convex)
 
