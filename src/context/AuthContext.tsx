@@ -15,30 +15,30 @@ export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // Listen for auth state changes
+  
   useEffect(() => {
-    // Initial session check
+    
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null);
       setLoading(false);
     });
 
-    // Auth state listener
+    
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUser(session?.user ?? null);
         
-        // ✅ Automatically create profile when user signs up
+        
         if (event === 'SIGNED_IN' && session?.user) {
           try {
-            // Check if profile already exists
+            
             const { data: existingProfile } = await supabase
               .from('profiles')
               .select('id')
               .eq('id', session.user.id)
               .single();
 
-            // If no profile exists, create one
+            
             if (!existingProfile) {
               await supabase
                 .from('profiles')

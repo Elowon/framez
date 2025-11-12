@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../context/AuthContext";
 import { View, Text, ActivityIndicator } from "react-native";
 
-// Screens
+
 import LoginScreen from "../Auth/LoginScreen";
 import RegisterScreen from "../Auth/RegisterScreen";
 import UploadScreen from "../screens/UploadScreen";
@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
   const { user, loading } = useAuth();
 
-  // Show a loading indicator
+  
   if (loading) {
     return (
       <View style={{ 
@@ -37,11 +37,11 @@ export default function AppNavigator() {
       <Stack.Navigator 
         screenOptions={{ 
           headerShown: false,
-          animation: 'none' // Disable animations during auth state changes
+          animation: 'none' 
         }}
       >
         {user ? (
-          // User is authenticated - show main app
+          
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -49,7 +49,7 @@ export default function AppNavigator() {
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
           </>
         ) : (
-          // User is not authenticated - show auth screens
+          
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />

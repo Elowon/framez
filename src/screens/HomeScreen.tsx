@@ -1,4 +1,4 @@
-// src/screens/HomeScreen.tsx
+
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import {
@@ -67,7 +67,7 @@ export default function HomeScreen() {
     {}
   );
 
-  // Comments state
+  
   const [commentsModalVisible, setCommentsModalVisible] = useState(false);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -75,7 +75,7 @@ export default function HomeScreen() {
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [postingComment, setPostingComment] = useState(false);
 
-  // ROBUST image URL fix - removes "Loading:" prefix and adds cache busting
+  
   const fixImageUrl = useCallback((url: string | null | undefined): string | null => {
     if (!url) {
       console.log("❌ No URL provided to fixImageUrl");
@@ -84,14 +84,14 @@ export default function HomeScreen() {
 
     console.log("🖼️ Original URL:", url);
 
-    // Remove any "Loading:" prefix (case insensitive, with or without space)
+    
     let cleanUrl = url;
     if (url.toLowerCase().includes('loading:')) {
       cleanUrl = url.replace(/loading:\s*/i, '');
       console.log("🖼️ Cleaned URL after removing 'Loading:':", cleanUrl);
     }
 
-    // Add cache busting
+    
     const separator = cleanUrl.includes('?') ? '&' : '?';
     const finalUrl = cleanUrl + `${separator}t=${Date.now()}`;
     console.log("🖼️ Final URL with cache busting:", finalUrl);
@@ -99,7 +99,6 @@ export default function HomeScreen() {
     return finalUrl;
   }, []);
 
-  // Enhanced image error handler with retry logic
   const handleImageError = useCallback(
     (imageUrl: string, postId: string) => {
       console.log(`❌ IMAGE FAILED TO LOAD: ${imageUrl}`);
@@ -109,19 +108,19 @@ export default function HomeScreen() {
 
       console.log(`Attempt ${attempts + 1} failed for:`, imageUrl);
 
-      // Update attempt count
+      
       setImageLoadAttempts((prev) => ({
         ...prev,
         [imageUrl]: attempts + 1,
       }));
 
-      // Add to failed images if we've tried multiple times
+      
       if (attempts >= 2) {
         console.log(`🚫 Giving up on image after 3 attempts: ${imageUrl}`);
         setFailedImages((prev) => new Set(prev).add(imageUrl));
       }
 
-      // Remove from loading state
+      
       setImageLoading((prev) => ({ ...prev, [imageUrl]: false }));
     },
     [imageLoadAttempts]
@@ -137,8 +136,6 @@ export default function HomeScreen() {
     setImageLoading((prev) => ({ ...prev, [imageUrl]: true }));
   }, []);
 
-  // FIXED: Fetch current user's profile with proper error handling
-  // Fetch current user's profile - FIXED VERSION
 const fetchCurrentUserProfile = useCallback(async () => {
   if (!user) return;
 
@@ -154,7 +151,6 @@ const fetchCurrentUserProfile = useCallback(async () => {
       return;
     }
 
-    // Check if we got any results
     if (data && data.length > 0) {
       setCurrentUserProfile(data[0]);
       console.log("✅ Current user profile:", data[0]);
@@ -168,13 +164,12 @@ const fetchCurrentUserProfile = useCallback(async () => {
   }
 }, [user]);
 
-  // PERSISTENT LIKE FUNCTION - saves to database
   const handleLike = useCallback(async (postId: string, currentlyLiked: boolean) => {
     if (!user) return;
 
     try {
       if (currentlyLiked) {
-        // Unlike - remove from database
+        
         const { error } = await supabase
           .from('likes')
           .delete()
@@ -183,7 +178,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
         
         if (error) throw error;
       } else {
-        // Like - add to database
+        
         const { error } = await supabase
           .from('likes')
           .insert({
@@ -194,7 +189,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
         if (error) throw error;
       }
 
-      // Update local state
+      
       setPosts(posts.map(post => 
         post.id === postId 
           ? { 
@@ -209,7 +204,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
     }
   }, [user, posts]);
 
-  // COMMENTS FUNCTIONS
+
   const openComments = useCallback(async (post: Post) => {
     setSelectedPost(post);
     setCommentsModalVisible(true);
@@ -244,7 +239,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
         return;
       }
 
-      // Transform the data to include user info
+      
       const formattedComments: Comment[] = commentsData?.map(comment => ({
         id: comment.id,
         post_id: comment.post_id,
@@ -279,11 +274,11 @@ const fetchCurrentUserProfile = useCallback(async () => {
 
       if (error) throw error;
 
-      // Clear input and refresh comments
+     
       setNewComment('');
       await fetchComments(selectedPost.id);
       
-      // Update post comments count
+      
       setPosts(posts.map(post => 
         post.id === selectedPost.id 
           ? { ...post, comments_count: (post.comments_count || 0) + 1 }
@@ -298,7 +293,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
     }
   }, [user, selectedPost, newComment, posts, fetchComments]);
 
-  // UPDATED Fetch posts function with comments count
+  
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     console.log("🔄 Starting to fetch posts...");
@@ -323,7 +318,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
         return;
       }
 
-      // Get user profiles for each post
+      
       const userIds = [...new Set(postsData.map((post) => post.user_id))];
       console.log("👥 User IDs in posts:", userIds);
 
@@ -338,12 +333,12 @@ const fetchCurrentUserProfile = useCallback(async () => {
         console.log(`👥 Found ${profilesData?.length || 0} profiles`);
       }
 
-      // ROBUST likes fetching with error handling
+    
       let userLikes = null;
       let likesCounts = null;
       
       try {
-        // Get likes data for current user
+        
         const likesResponse = await supabase
           .from('likes')
           .select('post_id')
@@ -361,7 +356,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
       }
 
       try {
-        // Get likes count for each post
+       
         const countsResponse = await supabase
           .from('likes')
           .select('post_id')
@@ -378,7 +373,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
         likesCounts = [];
       }
 
-      // NEW: Get comments count for each post
+      
       let commentsCounts = null;
       try {
         const commentsResponse = await supabase
@@ -397,7 +392,7 @@ const fetchCurrentUserProfile = useCallback(async () => {
         commentsCounts = [];
       }
 
-      // Process likes data
+      
       const userLikedPostIds = new Set(
   (userLikes ?? []).map((like: { post_id: string }) => like.post_id)
 );
@@ -416,7 +411,7 @@ const commentsCountMap = new Map<string, number>();
         commentsCountMap.set(comment.post_id, (commentsCountMap.get(comment.post_id) || 0) + 1);
       });
 
-      // Combine posts with profile data
+      
       const postsWithProfiles = postsData.map((post) => {
         const userProfile = profilesData?.find(
           (profile) => profile.id === post.user_id
@@ -451,7 +446,7 @@ const commentsCountMap = new Map<string, number>();
           }
         }
 
-        // Fix image URL
+       
         const fixedImageUrl = post.image_url
           ? fixImageUrl(post.image_url)
           : null;
@@ -484,19 +479,17 @@ const commentsCountMap = new Map<string, number>();
     }
   }, [user, currentUserProfile, fixImageUrl]);
 
-  // Profile useEffect
+  
   useEffect(() => {
     fetchCurrentUserProfile();
   }, [fetchCurrentUserProfile]);
 
-  // ✅ Refresh profile when screen comes into focus
   useEffect(() => {
     if (isFocused && user) {
       fetchCurrentUserProfile();
     }
   }, [isFocused, user, fetchCurrentUserProfile]);
 
-  // Real-time subscription for profile updates
   useEffect(() => {
     if (!user) return;
 
@@ -523,17 +516,15 @@ const commentsCountMap = new Map<string, number>();
     };
   }, [user]);
 
-  // UPDATED: Refresh posts when profile changes OR when profile is confirmed to be null
   useEffect(() => {
     console.log("🔄 Profile state changed, refreshing posts...");
     fetchPosts();
   }, [currentUserProfile, fetchPosts]);
 
-  // UPDATED: Posts useEffect with real-time subscriptions for posts, likes, AND comments
+  
   useEffect(() => {
     fetchPosts();
 
-    // Posts subscription
     const postsChannel = supabase
       .channel("posts-realtime")
       .on(
@@ -550,13 +541,13 @@ const commentsCountMap = new Map<string, number>();
       )
       .subscribe();
 
-    // Likes subscription for real-time like updates
+    
     const likesChannel = supabase
       .channel("likes-realtime")
       .on(
         "postgres_changes",
         {
-          event: "*", // Listen to all events (INSERT, DELETE)
+          event: "*", 
           schema: "public",
           table: "likes",
         },
@@ -567,13 +558,13 @@ const commentsCountMap = new Map<string, number>();
       )
       .subscribe();
 
-    // NEW: Comments subscription for real-time comment updates
+    
     const commentsChannel = supabase
       .channel("comments-realtime")
       .on(
         "postgres_changes",
         {
-          event: "*", // Listen to all events (INSERT, DELETE)
+          event: "*", 
           schema: "public",
           table: "comments",
         },
@@ -581,7 +572,7 @@ const commentsCountMap = new Map<string, number>();
           console.log("🔄 Comments updated, refreshing posts...", payload);
           fetchPosts();
           
-          // If comments modal is open for this post, refresh comments
+          
           if (selectedPost && payload.new && (payload.new as Comment).post_id === selectedPost.id) {
             fetchComments(selectedPost.id);
           }
@@ -610,14 +601,13 @@ const commentsCountMap = new Map<string, number>();
       console.log(`   - Likes: ${item.likes_count}, Liked: ${item.is_liked}`);
       console.log(`   - Comments: ${item.comments_count}`);
 
-      // Handle avatar URL - FIXED: Always provide fallback URL
+      
       const avatarUri = item.avatar_url
         ? fixImageUrl(item.avatar_url)
         : "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
       return (
         <View style={styles.postCard}>
-          {/* User info with avatar - FIXED */}
           <View style={styles.postHeader}>
             <Image
               source={{
@@ -648,10 +638,9 @@ const commentsCountMap = new Map<string, number>();
             </View>
           </View>
 
-          {/* Post content */}
+          
           {item.text ? <Text style={styles.postText}>{item.text}</Text> : null}
 
-          {/* Post image with enhanced loading */}
           {item.image_url && !isImageFailed ? (
             <View style={styles.imageContainer}>
               {isLoading && (
@@ -700,7 +689,6 @@ const commentsCountMap = new Map<string, number>();
             </View>
           ) : null}
 
-          {/* Engagement buttons */}
           <View style={styles.engagementBar}>
             <TouchableOpacity
               style={styles.engagementButton}
@@ -751,7 +739,6 @@ const commentsCountMap = new Map<string, number>();
     ]
   );
 
-  // Comments Modal Component
   const renderCommentsModal = () => (
     <Modal
       visible={commentsModalVisible}
@@ -763,7 +750,6 @@ const commentsCountMap = new Map<string, number>();
         style={styles.modalContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        {/* Modal Header */}
         <View style={styles.modalHeader}>
           <TouchableOpacity 
             style={styles.modalCloseButton}
@@ -775,7 +761,6 @@ const commentsCountMap = new Map<string, number>();
           <View style={styles.modalCloseButton} />
         </View>
 
-        {/* Comments List */}
         {commentsLoading ? (
           <View style={styles.commentsLoading}>
             <ActivityIndicator size="large" color="#667eea" />
@@ -827,7 +812,7 @@ const commentsCountMap = new Map<string, number>();
           />
         )}
 
-        {/* Comment Input */}
+        
         <View style={styles.commentInputContainer}>
           <TextInput
             style={styles.commentInput}
@@ -856,7 +841,7 @@ const commentsCountMap = new Map<string, number>();
     </Modal>
   );
 
-  // Handle header avatar - FIXED
+  
   const headerAvatarUri =
     currentUserProfile?.avatar_url || user?.user_metadata?.avatar_url;
   const fixedHeaderAvatarUri = headerAvatarUri
@@ -865,7 +850,6 @@ const commentsCountMap = new Map<string, number>();
 
   return (
     <View style={styles.container}>
-      {/* Beautiful Header - FIXED */}
       <View style={styles.header}>
         <View style={styles.headerBackground}>
           <View style={styles.gradientOverlay} />
@@ -945,10 +929,9 @@ const commentsCountMap = new Map<string, number>();
         />
       )}
 
-      {/* Comments Modal */}
+      
       {renderCommentsModal()}
 
-      {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
         <TouchableOpacity
           style={styles.navButton}
@@ -1041,7 +1024,6 @@ const commentsCountMap = new Map<string, number>();
   );
 }
 
-// ... keep your existing styles the same
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -1329,7 +1311,7 @@ const styles = StyleSheet.create({
     color: "#667eea",
     fontWeight: "600",
   },
-  // Comments Modal Styles
+
   modalContainer: {
     flex: 1,
     backgroundColor: '#fff',

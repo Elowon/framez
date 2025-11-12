@@ -1,4 +1,4 @@
-// src/screens/UploadScreen.tsx
+
 import React, { useState } from "react";
 import {
   View,
@@ -45,10 +45,10 @@ export default function UploadScreen() {
     if (!image) return null;
 
     try {
-      // Get upload URL from Convex
+     
       const uploadUrl = await generateUploadUrl();
       
-      // Upload the image
+      
       const response = await fetch(image);
       const blob = await response.blob();
       
@@ -60,7 +60,7 @@ export default function UploadScreen() {
       
       const { storageId } = await uploadResult.json();
       
-      // Get the public URL
+      
       return await getImageUrl({ storageId });
 
     } catch (err) {

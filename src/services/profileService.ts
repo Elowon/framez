@@ -1,10 +1,7 @@
-// src/services/profileService.ts
+
 import { supabase } from "./supabase";
 import * as FileSystem from 'expo-file-system';
 
-// ------------------------------
-// UPLOAD PROFILE IMAGE - FIXED (no EncodingType)
-// ------------------------------
 export async function uploadProfileImage(userId: string, fileUri: string) {
   try {
     const fileExt = fileUri.split(".").pop() || 'jpg';
@@ -12,7 +9,7 @@ export async function uploadProfileImage(userId: string, fileUri: string) {
     
     console.log('Uploading profile image...', fileName);
 
-    // FIX: Simple base64 without EncodingType enum
+    
     const base64 = await FileSystem.readAsStringAsync(fileUri, {
       encoding: 'base64'
     });
@@ -42,9 +39,6 @@ export async function uploadProfileImage(userId: string, fileUri: string) {
   }
 }
 
-// ------------------------------
-// UPLOAD COVER IMAGE - FIXED (no EncodingType)
-// ------------------------------
 export async function uploadCoverImage(userId: string, fileUri: string) {
   try {
     const fileExt = fileUri.split(".").pop() || 'jpg';
@@ -52,7 +46,7 @@ export async function uploadCoverImage(userId: string, fileUri: string) {
     
     console.log('Uploading cover image...', fileName);
 
-    // FIX: Simple base64 without EncodingType enum
+    
     const base64 = await FileSystem.readAsStringAsync(fileUri, {
       encoding: 'base64'
     });
@@ -82,9 +76,7 @@ export async function uploadCoverImage(userId: string, fileUri: string) {
   }
 }
 
-// ------------------------------
-// UPDATE PROFILE WITH IMAGE URLS
-// ------------------------------
+
 export async function updateProfileWithImages(userId: string, imageUpdates: { avatar_url?: string | null; cover_url?: string | null }) {
   try {
     const updates: any = {
@@ -115,9 +107,7 @@ export async function updateProfileWithImages(userId: string, imageUpdates: { av
   }
 }
 
-// ------------------------------
-// FETCH OR CREATE USER PROFILE
-// ------------------------------
+
 export async function fetchUserProfile(userId: string) {
   try {
     const { data, error } = await supabase
@@ -186,9 +176,7 @@ export async function fetchUserProfile(userId: string) {
   }
 }
 
-// ------------------------------
-// UPDATE USER PROFILE
-// ------------------------------
+
 export async function updateUserProfile(userId: string, updates: any) {
   try {
     const allowedFields = ['username', 'name', 'full_name', 'bio', 'avatar_url', 'cover_url', 'dark_mode'];
@@ -220,9 +208,7 @@ export async function updateUserProfile(userId: string, updates: any) {
   }
 }
 
-// ------------------------------
-// CREATE POST FUNCTION
-// ------------------------------
+
 export async function createPost(userId: string, postData: { text: string; imageUrl?: string }) {
   try {
     const post = {
@@ -248,9 +234,6 @@ export async function createPost(userId: string, postData: { text: string; image
   }
 }
 
-// ------------------------------
-// TEST SUPABASE CONNECTION
-// ------------------------------
 export async function testSupabaseConnection() {
   try {
     console.log('Testing Supabase connection...');
@@ -273,9 +256,6 @@ export async function testSupabaseConnection() {
   }
 }
 
-// ------------------------------
-// GET USER POSTS
-// ------------------------------
 export async function getUserPosts(userId: string) {
   try {
     const { data, error } = await supabase

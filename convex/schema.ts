@@ -5,7 +5,7 @@ export default defineSchema({
   posts: defineTable({
     userId: v.string(),
     text: v.string(),
-    image: v.optional(v.string()), // This will store the Convex file storageId
+    image: v.optional(v.string()), 
     createdAt: v.number(),
   }),
 });

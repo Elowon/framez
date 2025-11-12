@@ -27,7 +27,6 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Load saved email
   useEffect(() => {
     const loadEmail = async () => {
       const saved = await AsyncStorage.getItem("savedEmail");
@@ -72,7 +71,7 @@ export default function LoginScreen() {
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header with Logo */}
+        
         <View style={styles.header}>
           <View style={styles.logoContainer}>
             <Ionicons name="camera" size={32} color="#667eea" />
@@ -81,7 +80,7 @@ export default function LoginScreen() {
           <Text style={styles.subtitle}>Sign in to your account</Text>
         </View>
 
-        {/* Form Container */}
+        
         <View style={styles.formContainer}>
           {error ? (
             <View style={styles.errorContainer}>
@@ -90,7 +89,7 @@ export default function LoginScreen() {
             </View>
           ) : null}
 
-          {/* Email Input */}
+          
           <View style={styles.inputContainer}>
             <Ionicons
               name="mail-outline"
@@ -110,7 +109,7 @@ export default function LoginScreen() {
             />
           </View>
 
-          {/* Password Field */}
+          
           <View style={styles.inputContainer}>
             <Ionicons
               name="lock-closed-outline"
@@ -139,7 +138,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Remember Email & Forgot Password Row */}
+          
           <View style={styles.optionsRow}>
             <TouchableOpacity
               onPress={() => setRememberEmail(!rememberEmail)}
@@ -163,7 +162,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Login Button */}
+         
           <TouchableOpacity
             style={[styles.loginButton, loading && styles.loginButtonDisabled]}
             onPress={handleLogin}
@@ -176,14 +175,14 @@ export default function LoginScreen() {
             )}
           </TouchableOpacity>
 
-          {/* Divider */}
+          
           <View style={styles.divider}>
             <View style={styles.dividerLine} />
             <Text style={styles.dividerText}>OR</Text>
             <View style={styles.dividerLine} />
           </View>
 
-          {/* Register Link */}
+          
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}> {`Don't have an account?`}</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Register")}>
@@ -192,7 +191,7 @@ export default function LoginScreen() {
           </View>
         </View>
 
-        {/* Footer */}
+        
         <View style={styles.footer}>
           <Text style={styles.footerText}>
             Connect with friends and share your moments

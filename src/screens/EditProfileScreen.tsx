@@ -1,4 +1,4 @@
-// src/screens/EditProfileScreen.tsx
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -25,7 +25,7 @@ export default function EditProfileScreen() {
   const navigation = useNavigation<any>();
   const [user, setUser] = useState<any | null>(null);
 
-  // Convex upload functions
+ 
   const generateUploadUrl = useMutation(api.upload.generateUploadUrl);
   const getImageUrl = useMutation(api.upload.getImageUrl);
 
@@ -41,7 +41,7 @@ export default function EditProfileScreen() {
   const [bio, setBio] = useState("");
   const [darkMode, setDarkMode] = useState(false);
 
-  // Get user
+  
   useEffect(() => {
     const fetchUser = async () => {
       const res = await supabase.auth.getUser();
@@ -50,7 +50,7 @@ export default function EditProfileScreen() {
     fetchUser();
   }, []);
 
-  // Fetch profile data
+  
   useEffect(() => {
     if (!user) return;
     const loadProfile = async () => {
@@ -74,7 +74,7 @@ export default function EditProfileScreen() {
     loadProfile();
   }, [user]);
 
-  // Pick profile image
+  
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -87,7 +87,7 @@ export default function EditProfileScreen() {
     }
   };
 
-  // Pick cover image
+  
   const pickCover = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -100,7 +100,7 @@ export default function EditProfileScreen() {
     }
   };
 
-  // Convex upload logic (same as in UploadScreen)
+  
   const uploadImageToConvex = async (uri: string): Promise<string | null> => {
     try {
       const uploadUrl = await generateUploadUrl();
@@ -120,7 +120,7 @@ export default function EditProfileScreen() {
     }
   };
 
-  // Save changes
+  
   const saveChanges = async () => {
     if (!user) {
       Alert.alert("Error", "User not found.");
@@ -181,7 +181,7 @@ export default function EditProfileScreen() {
     >
       <StatusBar barStyle="light-content" backgroundColor="#667eea" />
 
-      {/* Header */}
+      
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -200,7 +200,7 @@ export default function EditProfileScreen() {
       </View>
 
       <ScrollView style={styles.scroll}>
-        {/* Cover */}
+       
         <TouchableOpacity onPress={pickCover} style={styles.coverContainer}>
           <Image
             source={{
@@ -217,7 +217,7 @@ export default function EditProfileScreen() {
           </View>
         </TouchableOpacity>
 
-        {/* Avatar */}
+        
         <View style={styles.avatarSection}>
           <TouchableOpacity onPress={pickImage}>
             <Image
@@ -235,7 +235,7 @@ export default function EditProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Form */}
+        
         <View style={styles.form}>
           <Text style={[styles.label, { color: darkMode ? "#fff" : "#333" }]}>
             Full Name

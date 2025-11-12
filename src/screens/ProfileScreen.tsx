@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"; // ✅ Added useCallback
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -41,14 +41,14 @@ export default function ProfileScreen() {
   const [loadingPosts, setLoadingPosts] = useState(true);
   const [activeTab, setActiveTab] = useState("posts");
 
-  // ✅ Wrap loadProfile in useCallback to avoid infinite re-renders
+  
   const loadProfile = useCallback(async () => {
     if (!user) return;
     const data = await fetchUserProfile(user.id);
     setProfile(data);
-  }, [user]); // ✅ Add dependencies
+  }, [user]); 
 
-  // ✅ Wrap loadPosts in useCallback
+  
   const loadPosts = useCallback(async () => {
     if (!user) return;
     setLoadingPosts(true);
@@ -60,16 +60,15 @@ export default function ProfileScreen() {
     } finally {
       setLoadingPosts(false);
     }
-  }, [user]); // ✅ Add dependencies
+  }, [user]); 
 
-  // Load user profile - UPDATED with focus listener
+  
   useEffect(() => {
     if (!user) return;
     
-    // Load profile initially and when screen comes into focus
     loadProfile();
 
-    // ✅ Add real-time subscription for profile updates
+    
     const profileSubscription = supabase
       .channel('profile-changes')
       .on(
@@ -90,23 +89,23 @@ export default function ProfileScreen() {
     return () => {
       supabase.removeChannel(profileSubscription);
     };
-  }, [user, loadProfile]); // ✅ Add loadProfile to dependencies
+  }, [user, loadProfile]); 
 
-  // ✅ Refresh profile when screen comes into focus
+  
   useEffect(() => {
     if (isFocused && user) {
       loadProfile();
     }
-  }, [isFocused, user, loadProfile]); // ✅ Add loadProfile to dependencies
+  }, [isFocused, user, loadProfile]); 
 
-  // Load user posts - UPDATED with focus listener
+  
   useEffect(() => {
     if (!user) return;
     
-    // Load posts initially
+    
     loadPosts();
 
-    // ✅ Add real-time subscription for posts
+    
     const postsSubscription = supabase
       .channel('user-posts-changes')
       .on(
@@ -119,7 +118,7 @@ export default function ProfileScreen() {
         },
         (payload) => {
           console.log('🔄 Posts updated, refreshing...', payload);
-          loadPosts(); // Reload posts when any change happens
+          loadPosts(); 
         }
       )
       .subscribe();
@@ -127,16 +126,16 @@ export default function ProfileScreen() {
     return () => {
       supabase.removeChannel(postsSubscription);
     };
-  }, [user, loadPosts]); // ✅ Add loadPosts to dependencies
+  }, [user, loadPosts]); 
 
-  // ✅ Refresh posts when screen comes into focus
+  
   useEffect(() => {
     if (isFocused && user) {
       loadPosts();
     }
-  }, [isFocused, user, loadPosts]); // ✅ Add loadPosts to dependencies
+  }, [isFocused, user, loadPosts]); 
 
-  // Pick & upload profile photo
+  
   const pickAndUploadImage = async () => {
     if (!user) return;
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -162,7 +161,7 @@ export default function ProfileScreen() {
         Alert.alert("Error", "Image upload failed.");
         return;
       }
-      // ✅ Refresh profile data after upload
+      
       await loadProfile();
       Alert.alert("Success", "Profile picture updated!");
     } catch {
@@ -172,7 +171,7 @@ export default function ProfileScreen() {
     }
   };
 
-  // ✅ DELETE post function
+  
   const handleDeletePost = async (postId: string) => {
     Alert.alert(
       "Delete Post",
@@ -192,7 +191,7 @@ export default function ProfileScreen() {
 
               if (error) throw error;
 
-              // Remove post locally
+              
               setPosts((prev) => prev.filter((p) => p.id !== postId));
               Alert.alert("Deleted", "Post deleted successfully.");
             } catch (error) {
@@ -205,7 +204,6 @@ export default function ProfileScreen() {
     );
   };
 
-  // Render post item
   const renderPostItem = ({ item }: { item: Post }) => (
     <TouchableOpacity
       onLongPress={() => handleDeletePost(item.id)}
@@ -226,14 +224,13 @@ export default function ProfileScreen() {
     </TouchableOpacity>
   );
 
-  // Stats data
+  
   const stats = [
     { label: "Posts", value: posts.length },
     { label: "Following", value: "0" },
     { label: "Followers", value: "0" },
   ];
 
-  // Logout
   const handleLogout = () => {
     Alert.alert("Log Out", "Are you sure you want to log out?", [
       { text: "Cancel", style: "cancel" },
@@ -244,7 +241,7 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#667eea" />
-      {/* Header */}
+      
       <View style={styles.header}>
         <View style={styles.headerBackground} />
         <View style={styles.headerContent}>
@@ -259,7 +256,7 @@ export default function ProfileScreen() {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Profile Header */}
+        
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
             <TouchableOpacity onPress={pickAndUploadImage}>
@@ -300,7 +297,7 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Stats */}
+        
         <View style={styles.statsContainer}>
           {stats.map((stat, index) => (
             <View key={stat.label} style={styles.statItem}>
@@ -311,7 +308,7 @@ export default function ProfileScreen() {
           ))}
         </View>
 
-        {/* Tabs */}
+        
         <View style={styles.tabsContainer}>
           <TouchableOpacity
             style={[styles.tab, activeTab === "posts" && styles.activeTab]}
@@ -346,7 +343,6 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Posts Grid */}
         {loadingPosts ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#667eea" />
@@ -385,7 +381,6 @@ export default function ProfileScreen() {
   );
 }
 
-// ✅ Keep your existing styles unchanged
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
   header: { backgroundColor: "transparent", overflow: "hidden" },
