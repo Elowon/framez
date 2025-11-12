@@ -50,7 +50,7 @@ Join our community of developers creating universal apps.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
 
-Framez — Mobile Social App (React Native / Expo)
+Framez -> Mobile Social App (React Native / Expo)
 
 A clean, auth-integrated social app built with React Native (Expo) that lets users create and share posts (text + image), view a global feed, and see their own profile and activity.
 This project uses Supabase for data storage and authentication, and Convex for image storage/handling.
@@ -204,7 +204,7 @@ Deployment & Appetize.io
 Build a binary or JavaScript bundle (for appetize you can upload an iOS .app or an Android .apk/.aab, or use Expo’s managed build to get an artifact).
 
 Upload to appetize.io
- — they will provide an embeddable link you can place in README or demo page.
+ -> they will provide an embeddable link you can place in README or demo page.
 
 Add the appetize link & demo video URL to the README.
 
@@ -212,7 +212,7 @@ Testing & QA
 
 Test flows: register, login, logout, create post (text only), create post (with image), single post view, profile posts display.
 
-Test auth persistence: close the app & reopen — the user should remain logged in.
+Test auth persistence: close the app & reopen the user should remain logged in.
 
 Check real-time updates by posting from multiple devices/emulators.
 
